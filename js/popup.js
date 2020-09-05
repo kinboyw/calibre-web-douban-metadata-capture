@@ -1,5 +1,5 @@
 $(function () {
-    $("#btnCopy").click(function () {
+    function copy(){
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { action: "copy" }, function (response) {
                 alert(response.book_title)
@@ -7,8 +7,9 @@ $(function () {
                 win.data = response;
             });
         });
-    });
-    $("#btnPaste").click(function () {
+    }
+
+    function paste() {
         var win = chrome.extension.getBackgroundPage();
         if (win.data) {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -17,5 +18,13 @@ $(function () {
                 });
             });
         }
-    });
+    }
+    function toggle(e){
+        let box = $("#shortcut input")
+        alert(box[0].checked)
+        e.stopPropagation()
+    }
+    $("#btnCopy").click(() => { copy() });
+    $("#btnPaste").click(() => { paste() });
+    $("#shortcut").click((e) => { toggle(e) });
 });
